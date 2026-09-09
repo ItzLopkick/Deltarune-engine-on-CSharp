@@ -50,12 +50,15 @@ public class Player
     {
         double ArenaX2 = ArenaX+ArenaWidth;
         double ArenaY2 = ArenaY+ArenaHeight;
+        Console.WriteLine("ShiftFlag : "+this.ShiftFlag);
         if (this.ShiftFlag == true)
         {
+            Console.WriteLine("BUFF?");
             this.Speed = this.SpeedBuff;
         }
         else
         {
+            Console.WriteLine("NORMAL?");
             this.Speed = this.SpeedFromStart;
         }
         if ((this.MoveRightFlag == true || this.MoveLeftFlag == true) && (this.MoveDownFlag == true || this.MoveUpFlag == true))

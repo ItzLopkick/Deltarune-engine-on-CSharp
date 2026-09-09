@@ -99,16 +99,16 @@ class BattleMode
             Source = new BitmapImage(new Uri("assets/player.png",UriKind.Relative))
         };
         player = new Player(
-            playersprite, // sprite
-            275, //hp
-            5, // defence
-            windowWidth/2-200, //spawnX
-            windowHeight/2, //spawnY
-            5, // speedfromstart
-            50, //width
-            50, // height
-            15, // sprintspeed
-            4 // ishowspeed said it is "BUTTON COUNT *HAW HAW"
+            Sprite : playersprite, // sprite
+            hp : 275, //hp
+            def : 5, // defence
+            X : windowWidth/2-200, //spawnX
+            Y : windowHeight/2, //spawnY
+            SpeedFromStart : 10, // speedfromstart
+            Width : 50, //width
+            Height : 50, // height
+            SpeedBuff : 5, // sprintspeed
+            ButtonCount : 4 // BUTTON COUNT
         );
         if (characterscount == 1)
         {
@@ -510,7 +510,7 @@ class BattleMode
         {
             player.MoveDownFlag = false;
         }
-        if (!InputSystem.keyboardbuttons.Contains(Key.LeftShift))
+        if (!InputSystem.keyboardbuttons.Contains(Key.X))
         {
             player.ShiftFlag = false;
         }
@@ -521,26 +521,30 @@ class BattleMode
     }
     void ProcesingKeysDown()
     {
-        if (InputSystem.keyboardbuttons.Contains(Key.Right))
+        if (BattleFlag == true)
         {
-            player.MoveRightFlag = true;
+            if (InputSystem.keyboardbuttons.Contains(Key.Right))
+            {
+                player.MoveRightFlag = true;
+            }
+            if (InputSystem.keyboardbuttons.Contains(Key.Up))
+            {
+                player.MoveUpFlag = true;
+            }
+            if (InputSystem.keyboardbuttons.Contains(Key.Down))
+            {
+                player.MoveDownFlag = true;
+            }
+            if (InputSystem.keyboardbuttons.Contains(Key.Left))
+            {
+                player.MoveLeftFlag = true;
+            }
+            if (InputSystem.keyboardbuttons.Contains(Key.X))
+            {
+                player.ShiftFlag = true;
+            }
         }
-        if (InputSystem.keyboardbuttons.Contains(Key.Up))
-        {
-            player.MoveUpFlag = true;
-        }
-        if (InputSystem.keyboardbuttons.Contains(Key.Down))
-        {
-            player.MoveDownFlag = true;
-        }
-        if (InputSystem.keyboardbuttons.Contains(Key.Left))
-        {
-            player.MoveLeftFlag = true;
-        }
-        if (InputSystem.keyboardbuttons.Contains(Key.LeftShift))
-        {
-            player.ShiftFlag = true;
-        }
+
         
         else if (BattleFlag == false)
         {
@@ -548,6 +552,7 @@ class BattleMode
             player.MoveRightFlag = false;
             player.MoveUpFlag = false;
             player.MoveDownFlag = false;
+            player.ShiftFlag = false;
             if (!(tick-buttonswipestamp >= 4))
             {
                 return;
