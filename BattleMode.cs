@@ -17,6 +17,7 @@ using System.Numerics;
 
 class BattleMode
 {
+    bool decline = false;
     BigInteger buttonswipestamp = 0; 
     BigInteger tick = 0;
     double windowWidth;
@@ -52,6 +53,7 @@ class BattleMode
     Arena arena;
     bool HealFlag = false;
     bool HitAnimFlag = false;
+    bool DefendFlag = false;
     //Timers
     Timer MaxTextTimer = new Timer(2);
 
@@ -124,60 +126,62 @@ class BattleMode
         // GUI buttons / bar
         AttckBtnSprite = new Image
         {
-            Width = 100,
-            Height = 100,
+            Width = 75,
+            Height = 75,
             Source = new BitmapImage(new Uri("assets/Buttons/AttackBtn/AttackBtn1.png",UriKind.Relative))
         };
         ActBtnSprite = new Image
         {
-            Width = 100,
-            Height = 100,
+            Width = 75,
+            Height = 75,
             Source = new BitmapImage(new Uri("assets/Buttons/ActBtn/Actbtn1.png",UriKind.Relative))
         };
         SpareBtnSprite = new Image
         {
-            Width = 100,
-            Height = 100,
-            Source = new BitmapImage(new Uri("assets/Buttons/AttackBtn/AttackBtn1.png",UriKind.Relative))
+            Width = 75,
+            Height = 75,
+            Source = new BitmapImage(new Uri("assets/Buttons/Mercybtn/Mercy1.png",UriKind.Relative))
         };
         BlockBtnSprite = new Image
         {
-            Width = 100,
-            Height = 100,
-            Source = new BitmapImage(new Uri("assets/Buttons/AttackBtn/AttackBtn1.png",UriKind.Relative))
+            Width = 75,
+            Height = 75,
+            Source = new BitmapImage(new Uri("assets/Buttons/Blockbtn/Defend1.png",UriKind.Relative))
         };
-        AttackBtn = new BtlButton(AttckBtnSprite,windowWidth/2-150,windowHeight-100,100,100,false,true);
-        ActBtn = new BtlButton(ActBtnSprite,windowWidth/2-50,windowHeight-100,100,100,false,false);
-        SpareBtn = new BtlButton(SpareBtnSprite,windowWidth/2+50,windowHeight-100,100,100,false,false);
-        BlockBtn = new BtlButton(BlockBtnSprite,windowWidth/2+150,windowHeight-100,100,100,false,false);
+        AttackBtn = new BtlButton(AttckBtnSprite,windowWidth/2-150,windowHeight-150,75,75,false,true);
+        ActBtn = new BtlButton(ActBtnSprite,windowWidth/2-75,windowHeight-150,75,75,false,false);
+        SpareBtn = new BtlButton(SpareBtnSprite,windowWidth/2,windowHeight-150,75,75,false,false);
+        BlockBtn = new BtlButton(BlockBtnSprite,windowWidth/2+75,windowHeight-150,75,75,false,false);
 
 
 
         StephBar = new Image
         {
-            Width = 500,
+            Width = 300,
             Height = 300,
             Source = new BitmapImage(new Uri("assets/Stephsbar.png",UriKind.Relative))
         };
         gcanvas.Children.Add(StephBar);
-        Canvas.SetLeft(StephBar,windowWidth/2-250);
-        Canvas.SetTop(StephBar,windowHeight-250);
+        Canvas.SetLeft(StephBar,windowWidth/2-150);
+        Canvas.SetTop(StephBar,windowHeight-300);
         PlayerHp = new TextBox
         {
-            Width = 120,
+            Width = 100,
             Height = 25,
             Text = ""+player.hp+"/"+player.maxhp,
             FontFamily = new FontFamily("pack://application:,,,/Fonts/#deltarune HP font"),
             FontSize = 22,
 
-            Background = Brushes.White,
-            BorderBrush = Brushes.Black
+            Background = Brushes.Black,
+            BorderBrush = Brushes.Black,
+            Foreground = Brushes.LightGreen
+            
         };
         PlayerHp.IsHitTestVisible = false;
         TextOptions.SetTextFormattingMode(PlayerHp, TextFormattingMode.Display);
         TextOptions.SetTextRenderingMode(PlayerHp, TextRenderingMode.Aliased);
         gcanvas.Children.Add(PlayerHp);
-        Canvas.SetLeft(PlayerHp,windowWidth/2+120);
+        Canvas.SetLeft(PlayerHp,windowWidth/2+30);
         Canvas.SetTop(PlayerHp,windowHeight-190);
         // Attack :)
         // Setings :)
@@ -249,6 +253,11 @@ class BattleMode
             {
                 RMusic.Stop();
                 return true;
+            }
+            if (decline == true)
+            {
+                RSound.PlaySound("assets/sounds/glue.mp3",1F);
+                decline = false;
             }
             if (player.hp <= 0)
             {
@@ -362,7 +371,11 @@ class BattleMode
                         if (CollisionsS.has_objects_collision(meteor,player) == true && attackSettings.attackTime%10 == 0)
                         {
                             double meteordamage = 10;
-                            player.hp = player.hp - (meteordamage-player.def);
+                            if (DefendFlag == true)
+                            {
+                                meteordamage = meteordamage-5;
+                            }
+                            player.hp = player.hp - meteordamage;
                             HitAnimFlag = true;
                         }
                         meteor.Undertale();
@@ -417,7 +430,11 @@ class BattleMode
                             if (CollisionsS.has_objects_collision(CC,player) == true && attackSettings.attackTime%20 == 0)
                             {
                                 double ccdamage = 10;
-                                player.hp = player.hp - (ccdamage-player.def);
+                                if (DefendFlag == true)
+                                {
+                                    ccdamage = ccdamage-5;
+                                }
+                                player.hp = player.hp - ccdamage;
                                 HitAnimFlag = true;
                             }
                             if (attackSettings.attackTime%60 == 0)
@@ -559,7 +576,7 @@ class BattleMode
             }
             if (InputSystem.keyboardbuttons.Contains(Key.Right))
             {
-                if (buttonselected > 3)
+                if (buttonselected >= 3)
                 {
                     buttonselected = 0;
                     HandlingBattleButtons();
@@ -572,7 +589,7 @@ class BattleMode
             }
             if (InputSystem.keyboardbuttons.Contains(Key.Left))
             {
-                if (buttonselected < 0)
+                if (buttonselected <= 0)
                 {
                     buttonselected = 3;
                     HandlingBattleButtons();
@@ -590,18 +607,22 @@ class BattleMode
                     Enemy1.hp = Enemy1.hp - 20;
                     BattleFlag = true;
                     Console.WriteLine("Attack"+" "+BattleFlag+" "+wave);
+                    DefendFlag = false;
                 }
                 if (buttonselected == 1)
                 {
                     HealFlag = true;
+                    DefendFlag = false;
                 }
                 if (buttonselected == 2)
                 {
-                    BattleFlag = true;
+                    decline = true;
+                    DefendFlag = false;
                 }
                 if (buttonselected == 3)
                 {
                     BattleFlag = true;
+                    DefendFlag = true;
                 }
             }
         }
@@ -630,19 +651,19 @@ class BattleMode
         }
         if (buttonselected == 2)
         {
-            SpareBtn.Sprite.Source = new BitmapImage(new Uri("assets/Buttons/Attackbtn/AttackBtn2.png",UriKind.Relative));
+            SpareBtn.Sprite.Source = new BitmapImage(new Uri("assets/Buttons/Mercybtn/Mercy1.png",UriKind.Relative));
         }
         if (buttonselected != 2)
         {
-            SpareBtn.Sprite.Source = new BitmapImage(new Uri("assets/Buttons/Attackbtn/AttackBtn1.png",UriKind.Relative));
+            SpareBtn.Sprite.Source = new BitmapImage(new Uri("assets/Buttons/Mercybtn/Mercy1.png",UriKind.Relative));
         }
         if (buttonselected == 3)
         {
-            BlockBtn.Sprite.Source = new BitmapImage(new Uri("assets/Buttons/Attackbtn/AttackBtn2.png",UriKind.Relative));
+            BlockBtn.Sprite.Source = new BitmapImage(new Uri("assets/Buttons/Blockbtn/Defend2.png",UriKind.Relative));
         }
         if (buttonselected != 3)
         {
-            BlockBtn.Sprite.Source = new BitmapImage(new Uri("assets/Buttons/Attackbtn/AttackBtn1.png",UriKind.Relative));
+            BlockBtn.Sprite.Source = new BitmapImage(new Uri("assets/Buttons/Blockbtn/Defend1.png",UriKind.Relative));
         }
         buttonswipestamp = tick;
         

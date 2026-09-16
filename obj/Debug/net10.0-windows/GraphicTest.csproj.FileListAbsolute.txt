@@ -60,3 +60,7 @@ C:\Programing\Csharp\GraphicTest\bin\Debug\net10.0-windows\assets\FreeMode\IdleU
 C:\Programing\Csharp\GraphicTest\bin\Debug\net10.0-windows\assets\Room1.png
 C:\Programing\Csharp\GraphicTest\bin\Debug\net10.0-windows\assets\sounds\weopenpull.mp3
 C:\Programing\Csharp\GraphicTest\bin\Debug\net10.0-windows\TiledSharp.dll
+C:\Programing\Csharp\GraphicTest\bin\Debug\net10.0-windows\assets\Buttons\Blockbtn\Defend1.png
+C:\Programing\Csharp\GraphicTest\bin\Debug\net10.0-windows\assets\Buttons\Blockbtn\Defend2.png
+C:\Programing\Csharp\GraphicTest\bin\Debug\net10.0-windows\assets\Buttons\Mercybtn\Mercy1.png
+C:\Programing\Csharp\GraphicTest\bin\Debug\net10.0-windows\assets\sounds\glue.mp3
