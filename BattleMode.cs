@@ -61,7 +61,7 @@ class BattleMode
 
 
 
-    public async Task<bool> StartBattle(Canvas gcanvas, Sound RMusic, Sound RSound, double windowWidth, double windowHeight)
+    public async Task<bool> StartBattle(Canvas gcanvas, Sound RMusic, Sound RSound, double windowWidth, double windowHeight,PlayerStats FirstCharacterStats)
     {
         wave = 2;
         // Arena!!!
@@ -102,8 +102,9 @@ class BattleMode
         };
         player = new Player(
             Sprite : playersprite, // sprite
-            hp : 275, //hp
-            def : 5, // defence
+            hp : FirstCharacterStats.hp, //hp
+            def : FirstCharacterStats.def, // defence
+            maxhp : FirstCharacterStats.maxhp,
             X : windowWidth/2-200, //spawnX
             Y : windowHeight/2, //spawnY
             SpeedFromStart : 10, // speedfromstart
@@ -120,7 +121,8 @@ class BattleMode
         {
             FirstCharacter = new PlayerBtl(50,windowHeight/2-155,300,300);
         }
-        Enemy1 = new EnemyBtl(windowWidth+200,windowHeight/2-135,150,150,250);
+        Enemy1 = new EnemyBtl(windowWidth+200,windowHeight/2+135,150,150,1);
+        gcanvas.Children.Add(Enemy1.Sprite);
         Canvas.SetLeft(Enemy1.Sprite,Enemy1.X);
         Canvas.SetLeft(Enemy1.Sprite,Enemy1.Y);
         // GUI buttons / bar
@@ -170,7 +172,7 @@ class BattleMode
             Height = 25,
             Text = ""+player.hp+"/"+player.maxhp,
             FontFamily = new FontFamily("pack://application:,,,/Fonts/#deltarune HP font"),
-            FontSize = 22,
+            FontSize = 24,
 
             Background = Brushes.Black,
             BorderBrush = Brushes.Black,
@@ -252,6 +254,10 @@ class BattleMode
             if (Enemy1.hp <= 0)
             {
                 RMusic.Stop();
+                gcanvas.Children.Clear();
+                FirstCharacterStats.hp = player.hp;
+                FirstCharacterStats.maxhp = player.maxhp;
+                FirstCharacterStats.def = player.def;
                 return true;
             }
             if (decline == true)

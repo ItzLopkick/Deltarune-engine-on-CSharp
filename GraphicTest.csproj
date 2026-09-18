@@ -23,14 +23,16 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-  <Resource Include="Fonts\dhp.ttf">
-    </Resource>
+  <Resource Include="Fonts\deltarune HP font.ttf"/>
   </ItemGroup>
   <ItemGroup>
   <None Update="*.tmx">
     <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
   </None>
   <None Update="*.png">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </None>
+  <None Update="*.ttf">
     <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
   </None>
 </ItemGroup>

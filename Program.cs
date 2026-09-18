@@ -26,24 +26,35 @@ public static class Program
 public class Game:Window
 {
     private static readonly WaveOutEvent waveOut = new();
-
     bool Freemode = true;
     bool BattleMode = false;
 
     BattleMode battleMode = new BattleMode();
+    Freemode freemode = new Freemode();
 
     // InputSystem inputSystem = new InputSystem();
-
-    Image Room1;
 
     // sounds
     Sound RMusic = new Sound();
     Sound RSound = new Sound();
+
+    // Player's stats
+    PlayerStats FirstPlayerStats;
     public Game()
     {
+        FirstPlayerStats = new PlayerStats(
+            hp: 275,
+            maxhp: 275,
+            def: 2
+        );
+
+
+
+
+
         var gcanvas = new Canvas{};
         Content = gcanvas;
-        Title = "The rain test";
+        Title = "Deltasharp";
         this.WindowState = WindowState.Maximized;
         this.WindowStyle = WindowStyle.None;
         this.Topmost = true;
@@ -57,14 +68,33 @@ public class Game:Window
         Loaded += async (_,__) => // :0
         // MAIN CODE HERE
         {
+            Console.WriteLine("|Freemode|");
+            await freemode.StartFreeMode(
+                gcanvas: gcanvas,
+                RMusic: RMusic,
+                RSound: RSound,
+                windowWidth: this.ActualWidth-15,
+                windowHeight: this.ActualHeight-38,
+                FirstCharacterStats: FirstPlayerStats
+                
+            );
             await battleMode.StartBattle(
                 gcanvas: gcanvas ,
                 RMusic: RMusic,
                 RSound: RSound,
                 windowWidth: this.ActualWidth-15,
-                windowHeight: this.ActualHeight-38
+                windowHeight: this.ActualHeight-38,
+                FirstCharacterStats: FirstPlayerStats
             );
-            Console.WriteLine("|Freemode|");
+            await freemode.StartFreeMode(
+                gcanvas: gcanvas,
+                RMusic: RMusic,
+                RSound: RSound,
+                windowWidth: this.ActualWidth-15,
+                windowHeight: this.ActualHeight-38,
+                FirstCharacterStats: FirstPlayerStats
+                
+            );
         };
         
     }

@@ -4,7 +4,7 @@ using System.Windows.Shapes;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-public class Player
+public class PlayerF
 {
     public Image Sprite;
     public double Speed;
@@ -26,11 +26,10 @@ public class Player
     public bool ShiftFlag = false;
     public double SpeedFromStart;
     public double ButtonCount;
-    public Player(Image Sprite,double hp,double def,double maxhp,double X,double Y,double SpeedFromStart,double Width, double Height, double SpeedBuff, double ButtonCount)
+    public PlayerF(Image Sprite,double hp,double def,double X,double Y,double SpeedFromStart,double Width, double Height, double SpeedBuff, double ButtonCount)
     {
         this.Sprite = Sprite;
         this.hp = hp;
-        this.def = def;
         this.maxhp = hp;
         this.SpeedFromStart = SpeedFromStart;
         this.Speed = SpeedFromStart;
